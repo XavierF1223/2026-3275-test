@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.KickerConstants;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.commands.Autos;
@@ -18,6 +20,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -63,7 +67,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
+    m_driverController.a().onTrue(
+      new ParallelCommandGroup(
+      (new RunCommand(() -> m_hopper.setDutyCycleOut(HopperConstants.m_HopperSpeed), m_hopper)),
+      (new RunCommand(()-> m_kicker.setDutyCycleOut(KickerConstants.m_KickerSpeed), m_kicker))));
+    m_driverController.b().onTrue(new RunCommand(()-> m_intake.setPivotPoint(IntakeConstants.m_PivotUp), m_intake));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.

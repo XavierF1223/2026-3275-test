@@ -6,11 +6,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -37,31 +38,35 @@ public class ShooterSubsystem extends SubsystemBase {
     var motorConfigs = new TalonFXConfiguration();  
     motorConfigs
     .withMotorOutput(
-    new MotorOutputConfigs()
-    .withNeutralMode(NeutralModeValue.Coast)
-    .withInverted(InvertedValue.valueOf("CounterClockwise_Positive"))
+      new MotorOutputConfigs()
+      .withNeutralMode(NeutralModeValue.Coast)
+      .withInverted(InvertedValue.valueOf("CounterClockwise_Positive"))
     )
     .withCurrentLimits(
-    new CurrentLimitsConfigs()
-    .withStatorCurrentLimitEnable(ShooterConstants.kMotorCurrentLimitEnable)
-    .withStatorCurrentLimit(ShooterConstants.kMotorCurrentLimit)
+      new CurrentLimitsConfigs()
+      .withStatorCurrentLimitEnable(ShooterConstants.kMotorCurrentLimitEnable)
+      .withStatorCurrentLimit(ShooterConstants.kMotorCurrentLimit)
+    )
+    .withSlot0(
+      new Slot0Configs()
+      .withKS(ShooterConstants.kS)
+      .withKV(ShooterConstants.kV)
+      .withKA(ShooterConstants.kA)
+      .withKP(ShooterConstants.kP)
+      .withKI(ShooterConstants.kI)
+      .withKD(ShooterConstants.kD)
+    )
+    .withMotionMagic(
+      new MotionMagicConfigs()
+      .withMotionMagicAcceleration(ShooterConstants.kMMA)
+      .withMotionMagicJerk(ShooterConstants.kMMJ)
     );
-    // slot0 velocity configs
-    var slot0configs = new Slot0Configs();
-    slot0configs.kS = ShooterConstants.kS;
-    slot0configs.kV = ShooterConstants.kV;
-    slot0configs.kA = ShooterConstants.kA;
-    slot0configs.kP = ShooterConstants.kP;
-    slot0configs.kI = ShooterConstants.kI;
-    slot0configs.kD = ShooterConstants.kD;
     // Config main MOTOR FIRST
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
       status = motorConfigurator1.apply(motorConfigs);
-      status = motorConfigurator1.apply(slot0configs);
       status = motorConfigurator2.apply(motorConfigs);
-      status = motorConfigurator2.apply(slot0configs);
       if (status.isOK()) break;
     }
     if (!status.isOK() ) {
@@ -87,11 +92,11 @@ public class ShooterSubsystem extends SubsystemBase {
     FollowMotor.setControl(new Follower(MainMotor.getDeviceID(), MotorAlignmentValue.Aligned));
   }
 
-  public void SetVelocity(int rps){
-    final VelocityTorqueCurrentFOC m_request = new VelocityTorqueCurrentFOC(0)
-    .withSlot(0);
+  public void SetVelocity(double rps){
+    final MotionMagicVelocityVoltage m_request = 
+    new MotionMagicVelocityVoltage(0).withSlot(0);
 
-    MainMotor.setControl(m_request.withVelocity(rps));
+    MainMotor.setControl(m_request.withVelocity(rps).withEnableFOC(true));
   }
   public double GetVelocity(){
     return MainMotor.getVelocity().getValueAsDouble();

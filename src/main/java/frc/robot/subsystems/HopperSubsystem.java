@@ -8,6 +8,7 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -26,13 +27,13 @@ public class HopperSubsystem extends SubsystemBase {
     var motorConfigs = new TalonFXConfiguration();  
     motorConfigs
     .withMotorOutput(
-    new MotorOutputConfigs()
-    .withNeutralMode(NeutralModeValue.Coast)
+      new MotorOutputConfigs()
+      .withNeutralMode(NeutralModeValue.Coast)
     )
     .withCurrentLimits(
-    new CurrentLimitsConfigs()
-    .withStatorCurrentLimitEnable(HopperConstants.kHopperMotorCurrentLimitEnable)
-    .withStatorCurrentLimit(HopperConstants.kHopperMotorCurrentLimit)
+      new CurrentLimitsConfigs()
+      .withStatorCurrentLimitEnable(HopperConstants.kHopperMotorCurrentLimitEnable)
+      .withStatorCurrentLimit(HopperConstants.kHopperMotorCurrentLimit)
     );
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -44,6 +45,12 @@ public class HopperSubsystem extends SubsystemBase {
     if (!status.isOK() ) {
       System.out.println("Could not apply configs, error code Status 1: " + status.toString());
     }
+  }
+
+  public void setDutyCycleOut(double speed) {
+    final DutyCycleOut m_request = new DutyCycleOut(0).withEnableFOC(true);
+
+    HopperMotor.setControl(m_request.withOutput(speed));
   }
   @Override
   public void periodic() {

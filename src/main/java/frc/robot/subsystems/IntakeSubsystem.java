@@ -7,8 +7,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -32,14 +36,14 @@ public class IntakeSubsystem extends SubsystemBase {
     var motorConfigurator = RollerMotor.getConfigurator();
     var motorConfigs = new TalonFXConfiguration();  
     motorConfigs
-    .withMotorOutput(
-    new MotorOutputConfigs()
-    .withNeutralMode(NeutralModeValue.Brake)
+      .withMotorOutput(
+      new MotorOutputConfigs()
+      .withNeutralMode(NeutralModeValue.Brake)
     )
     .withCurrentLimits(
-    new CurrentLimitsConfigs()
-    .withStatorCurrentLimitEnable(IntakeConstants.kRollerMotorCurrentLimitEnable)
-    .withStatorCurrentLimit(IntakeConstants.kRollerMotorCurrentLimit)
+      new CurrentLimitsConfigs()
+      .withStatorCurrentLimitEnable(IntakeConstants.kRollerMotorCurrentLimitEnable)
+      .withStatorCurrentLimit(IntakeConstants.kRollerMotorCurrentLimit)
     );
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -57,8 +61,28 @@ public class IntakeSubsystem extends SubsystemBase {
     var motorConfigurator = PivotMotor.getConfigurator();
     var motorConfigs = new TalonFXConfiguration(); 
     motorConfigs.withMotorOutput(
-    new MotorOutputConfigs()
-    .withNeutralMode(NeutralModeValue.Brake) 
+      new MotorOutputConfigs()
+      .withNeutralMode(NeutralModeValue.Brake) 
+    )
+    .withCurrentLimits(
+      new CurrentLimitsConfigs()
+      .withStatorCurrentLimitEnable(IntakeConstants.kPivorMotorCurrentLimitEnable)
+      .withStatorCurrentLimit(IntakeConstants.kPivotMotorCurrentLimit)
+    )
+    .withSlot0(
+      new Slot0Configs()
+      .withKS(IntakeConstants.kPivotKS)
+      .withKV(IntakeConstants.kPivotKV)
+      .withKA(IntakeConstants.kPivotKA)
+      .withKP(IntakeConstants.kPivotKP)
+      .withKI(IntakeConstants.kPivotKI)
+      .withKD(IntakeConstants.kPivotKD)
+    )
+    .withMotionMagic(
+      new MotionMagicConfigs()
+      .withMotionMagicCruiseVelocity(IntakeConstants.kPivotMMCV)
+      .withMotionMagicAcceleration(IntakeConstants.kPivotMMA)
+      .withMotionMagicJerk(IntakeConstants.kPivotMMJ)
     );
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -70,6 +94,18 @@ public class IntakeSubsystem extends SubsystemBase {
     if (!status.isOK() ) {
       System.out.println("Could not apply configs, error code Status 1: " + status.toString());
     }
+  }
+
+  public void setRollerSpeed(double speed){
+    final DutyCycleOut m_request = new DutyCycleOut(0).withEnableFOC(true);
+
+    RollerMotor.setControl(m_request.withOutput(speed));
+  }
+  
+  public void setPivotPoint(double position){
+    final MotionMagicVoltage m_request = new MotionMagicVoltage(0).withEnableFOC(true);
+
+    PivotMotor.setControl(m_request.withPosition(position));
   }
   @Override
   public void periodic() {
