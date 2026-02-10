@@ -53,6 +53,12 @@ public final class Constants {
     public static final boolean kKickerMotorCurrentLimitEnable = true;
     public static final int kKickerMotorCurrentLimit = 60;
     public static final double m_KickerSpeed = 0;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
   
     
   }

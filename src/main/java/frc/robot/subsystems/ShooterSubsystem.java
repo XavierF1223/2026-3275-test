@@ -6,12 +6,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -55,11 +54,6 @@ public class ShooterSubsystem extends SubsystemBase {
       .withKP(ShooterConstants.kP)
       .withKI(ShooterConstants.kI)
       .withKD(ShooterConstants.kD)
-    )
-    .withMotionMagic(
-      new MotionMagicConfigs()
-      .withMotionMagicAcceleration(ShooterConstants.kMMA)
-      .withMotionMagicJerk(ShooterConstants.kMMJ)
     );
     // Config main MOTOR FIRST
     /* Retry config apply up to 5 times, report if failure */
@@ -93,13 +87,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void SetVelocity(double rps){
-    final MotionMagicVelocityVoltage m_request = 
-    new MotionMagicVelocityVoltage(0).withSlot(0);
+    rps = rps/60;
+    final VelocityVoltage m_request = 
+    new VelocityVoltage(0).withSlot(0);
 
     MainMotor.setControl(m_request.withVelocity(rps).withEnableFOC(true));
   }
   public double GetVelocity(){
-    return MainMotor.getVelocity().getValueAsDouble();
+    return MainMotor.getVelocity().getValueAsDouble() * 60;
   }
   @Override
   public void periodic() {

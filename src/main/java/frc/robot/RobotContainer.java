@@ -70,7 +70,7 @@ public class RobotContainer {
     m_driverController.a().onTrue(
       new ParallelCommandGroup(
       (new RunCommand(() -> m_hopper.setDutyCycleOut(HopperConstants.m_HopperSpeed), m_hopper)),
-      (new RunCommand(()-> m_kicker.setDutyCycleOut(KickerConstants.m_KickerSpeed), m_kicker))));
+      (new RunCommand(()-> m_kicker.setVelocity(KickerConstants.m_KickerSpeed), m_kicker))));
     m_driverController.b().onTrue(new RunCommand(()-> m_intake.setPivotPoint(IntakeConstants.m_PivotUp), m_intake));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,

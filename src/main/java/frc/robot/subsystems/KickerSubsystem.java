@@ -4,11 +4,13 @@
 
 package frc.robot.subsystems;
 
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -32,12 +34,21 @@ public class KickerSubsystem extends SubsystemBase {
     motorConfigs
     .withMotorOutput(
       new MotorOutputConfigs()
-      .withNeutralMode(NeutralModeValue.Brake)
+      .withNeutralMode(NeutralModeValue.Coast)
     )
     .withCurrentLimits(
       new CurrentLimitsConfigs()
       .withStatorCurrentLimitEnable(KickerConstants.kKickerMotorCurrentLimitEnable)
       .withStatorCurrentLimit(KickerConstants.kKickerMotorCurrentLimit)
+    )
+    .withSlot0(
+      new Slot0Configs()
+      .withKS(KickerConstants.kS)
+      .withKV(KickerConstants.kV)
+      .withKA(KickerConstants.kA)
+      .withKP(KickerConstants.kP)
+      .withKI(KickerConstants.kI)
+      .withKD(KickerConstants.kD)
     );
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -51,18 +62,20 @@ public class KickerSubsystem extends SubsystemBase {
     }
   }
 
-   public void setDutyCycleOut(double speed) {
-    final DutyCycleOut m_request = new DutyCycleOut(0).withEnableFOC(true);
+   public void setVelocity(double rps) {
+     rps = rps/60;
+    final VelocityVoltage m_request = 
+    new VelocityVoltage(0).withSlot(0);
 
-    KickerMotor.setControl(m_request.withOutput(speed));
+    KickerMotor.setControl(m_request.withVelocity(rps).withEnableFOC(true));
    }
 
-    public double GetOutput(){
-    return KickerMotor.getDutyCycle().getValueAsDouble();
+    public double getVelocity(){
+    return KickerMotor.getVelocity().getValueAsDouble() * 60;
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Kicker Output", GetOutput());
+    SmartDashboard.putNumber("Kicker Velocity", getVelocity());
   }
 }
