@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -13,11 +16,14 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -105,6 +111,50 @@ public class IntakeSubsystem extends SubsystemBase {
     if (!status.isOK() ) {
       System.out.println("Could not apply configs, error code Status 1: " + status.toString());
     }
+  }
+//----SysID Methods---------------------------------------------------------
+private final SysIdRoutine m_RollerSysIdRoutine = 
+   new SysIdRoutine(
+      new SysIdRoutine.Config(
+         null,        // Use default ramp rate (1 V/s)
+         Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+         null,        // Use default timeout (10 s)
+                      // Log state with Phoenix SignalLogger class
+         (state) -> SignalLogger.writeString("state", state.toString())
+      ),
+      new SysIdRoutine.Mechanism(
+         (volts) -> RollerMotor.setControl(new VoltageOut(0).withOutput(volts.in(Volts))),
+         null,
+         this
+      )
+   );
+private final SysIdRoutine m_PivotSysIdRoutine = 
+   new SysIdRoutine(
+      new SysIdRoutine.Config(
+         null,        // Use default ramp rate (1 V/s)
+         Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+         null,        // Use default timeout (10 s)
+                      // Log state with Phoenix SignalLogger class
+         (state) -> SignalLogger.writeString("state", state.toString())
+      ),
+      new SysIdRoutine.Mechanism(
+         (volts) -> PivotMotor.setControl(new VoltageOut(0).withOutput(volts.in(Volts))),
+         null,
+         this
+      )
+   );
+
+   public Command RollersysIDQuasistatic(SysIdRoutine.Direction direction){
+    return m_RollerSysIdRoutine.quasistatic(direction);
+   }
+   public Command RollersysIdDynamic(SysIdRoutine.Direction direction) {
+   return m_RollerSysIdRoutine.dynamic(direction);
+  }
+     public Command PivotsysIDQuasistatic(SysIdRoutine.Direction direction){
+    return m_PivotSysIdRoutine.quasistatic(direction);
+   }
+   public Command PivotsysIdDynamic(SysIdRoutine.Direction direction) {
+   return m_PivotSysIdRoutine.dynamic(direction);
   }
 // -----methods-------------------------------------------------------------
   public void setRollerSpeed(double speed){

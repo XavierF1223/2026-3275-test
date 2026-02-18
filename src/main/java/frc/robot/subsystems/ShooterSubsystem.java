@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -11,13 +14,16 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
@@ -67,26 +73,33 @@ public class ShooterSubsystem extends SubsystemBase {
     if (!status.isOK() ) {
       System.out.println("Could not apply configs, error code Status 1: " + status.toString());
     }
-    /** dont have to do this??
-    //Invert and config Follow motor
-    motorConfigs.withMotorOutput(
-      new MotorOutputConfigs()
-      .withInverted(InvertedValue.valueOf("Clockwise_Postitive"))
-    );
-    
-        /* Retry config apply up to 5 times, report if failure 
-    for (int i = 0; i < 5; ++i) {
-      status = motorConfigurator2.apply(motorConfigs);
-      if (status.isOK()) break;
-    }
-    if (!status.isOK() ) {
-      System.out.println("Could not apply configs, error code Status 1: " + status.toString());
-    }
-    */
     //Set Follow to Follow
     FollowMotor.setControl(new Follower(MainMotor.getDeviceID(), MotorAlignmentValue.Aligned));
   }
+  //----SysID Methods---------------------------------------------------------
+private final SysIdRoutine m_ShooterSysIdRoutine = 
+   new SysIdRoutine(
+      new SysIdRoutine.Config(
+         null,        // Use default ramp rate (1 V/s)
+         Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+         null,        // Use default timeout (10 s)
+                      // Log state with Phoenix SignalLogger class
+         (state) -> SignalLogger.writeString("state", state.toString())
+      ),
+      new SysIdRoutine.Mechanism(
+         (volts) -> MainMotor.setControl(new VoltageOut(0).withOutput(volts.in(Volts))),
+         null,
+         this
+      )
+   );
 
+   public Command sysIDQuasistatic(SysIdRoutine.Direction direction){
+    return m_ShooterSysIdRoutine.quasistatic(direction);
+   }
+   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+   return m_ShooterSysIdRoutine.dynamic(direction);
+  }
+// -----methods-------------------------------------------------------------
   public void SetVelocity(double rps){
     rps = rps/60;
     final VelocityVoltage m_request = 

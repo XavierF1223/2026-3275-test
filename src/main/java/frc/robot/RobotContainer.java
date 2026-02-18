@@ -107,21 +107,47 @@ public class RobotContainer {
     //Reset Heading
     m_driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    //-----------SysID Stuffs----------------------------------
+    //-----------SysID Stuffs------------------------------------------------------------------------------
     //m_driverController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
     //m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
-    //m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    //m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-    //m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    //m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-
+    //----Drivetrain--------------------------------------------------------------------
+    /* 
+    m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+    m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+    m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+    m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+    */
+    //--Intake Pivot---------------------------------------------------------------------------
+    /* 
+    m_driverController.povUp().whileTrue(m_intake.PivotsysIDQuasistatic(Direction.kForward));
+    m_driverController.povDown().whileTrue(m_intake.PivotsysIDQuasistatic(Direction.kReverse));
+    m_driverController.povLeft().whileTrue(m_intake.PivotsysIdDynamic(Direction.kForward));
+    m_driverController.povRight().whileTrue(m_intake.PivotsysIdDynamic(Direction.kReverse));
+    */
+    //--Intake Roller---------------------------------------------------------------------------
+    /* 
+    m_driverController.povUp().whileTrue(m_intake.RollersysIDQuasistatic(Direction.kForward));
+    m_driverController.povDown().whileTrue(m_intake.RollersysIDQuasistatic(Direction.kReverse));
+    m_driverController.povLeft().whileTrue(m_intake.RollersysIdDynamic(Direction.kForward));
+    m_driverController.povRight().whileTrue(m_intake.RollersysIdDynamic(Direction.kReverse));
+    */
+    //--Kicker---------------------------------------------------------------------------
+    /* 
+    m_driverController.povUp().whileTrue(m_kicker.sysIDQuasistatic(Direction.kForward));
+    m_driverController.povDown().whileTrue(m_kicker.sysIDQuasistatic(Direction.kReverse));
+    m_driverController.povLeft().whileTrue(m_kicker.sysIdDynamic(Direction.kForward));
+    m_driverController.povRight().whileTrue(m_kicker.sysIdDynamic(Direction.kReverse));
+    */
+    //--Shooter---------------------------------------------------------------------------
+    /* 
+    m_driverController.povUp().whileTrue(m_shooter.sysIDQuasistatic(Direction.kForward));
+    m_driverController.povDown().whileTrue(m_shooter.sysIDQuasistatic(Direction.kReverse));
+    m_driverController.povLeft().whileTrue(m_shooter.sysIdDynamic(Direction.kForward));
+    m_driverController.povRight().whileTrue(m_shooter.sysIdDynamic(Direction.kReverse));
+    */
   }
 
   /**

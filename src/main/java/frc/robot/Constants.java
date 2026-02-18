@@ -37,14 +37,14 @@ public final class Constants {
     public static final boolean kRollerMotorCurrentLimitEnable = true;
     public static final int kRollerMotorCurrentLimit = 80;    public static final double kRollerKS = 0;
     public static final double kRollerKV = 0;
-    public static final double kRollerKP = 0.1;
+    public static final double kRollerKP = 2;
     public static final double kRollerKI = 0;
     public static final double kRollerKD = 0;
-    public static final double rollerRatio = 0;
+    public static final double rollerRatio = 1.33;
     //Roller Motor Constants
     public static final double m_RollerVelocity = 50;
     //Pivor Motor Configs
-    public static int kIntakePivotMotorPort = 32;
+    public static final int kIntakePivotMotorPort = 32;
     public static final boolean kPivorMotorCurrentLimitEnable = false;
     public static final double kPivotMotorCurrentLimit = 80;
     public static final double kPivotKS = 0;
@@ -56,7 +56,7 @@ public final class Constants {
     public static final double kPivotMMCV = 0;
     public static final double kPivotMMA = 0;
     public static final double kPivotMMJ = 0;   
-    public static final double pivotRatio = 0;
+    public static final double pivotRatio = 50;
     //Pivot Motor Setpoints
     public static final double m_PivotUp = 0;
 
@@ -65,14 +65,14 @@ public final class Constants {
     public static final int kKickerMotorPort = 35;
     public static final boolean kKickerMotorCurrentLimitEnable = true;
     public static final int kKickerMotorCurrentLimit = 60;
-    public static final double m_KickerVelocity = 50; //rotations per second
+    public static final double m_KickerVelocity = 50; //rotations per second, find a number and tune shooter after
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;
-    public static final double kP = 0.1;
+    public static final double kP = 10;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double mechanismRatio = 0;
+    public static final double mechanismRatio = 1;
   
   }
   public static class HopperConstants {
@@ -92,10 +92,10 @@ public final class Constants {
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;
-    public static final double kP = 0.1;
+    public static final double kP = 10;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double mechanismRatio = 0;
+    public static final double mechanismRatio = 1.5;// count to get right value
     
   }
 
