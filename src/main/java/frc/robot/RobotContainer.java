@@ -118,7 +118,7 @@ public class RobotContainer {
     //m_driverController.x().onTrue(new RunCommand(() -> m_shooter.SetVelocity(42), m_shooter)).onFalse(new RunCommand(()-> m_shooter.setNeutral(), m_shooter));
     m_driverController.x().toggleOnTrue(new ShooterRange(m_shooter, m_vision));
     m_driverController.y().toggleOnTrue(new TargetHub(drivetrain, m_vision));
-    m_driverController.rightTrigger().onTrue(new IntakeRun(m_intake));
+    m_driverController.rightTrigger().onTrue(new IntakeRun(m_intake, drivetrain));
     //m_driverController.rightTrigger().onTrue(new RunCommand(()-> m_intake.setRollerSpeed(IntakeConstants.m_RollerVelocity),m_intake)).onFalse(new RunCommand(()-> m_intake.setRollerNeutral(),m_intake));
     
     m_driverController.leftBumper().onTrue(new RunCommand(() -> m_intake.setPivotOut(0.15), m_intake)).onFalse(new RunCommand(()->m_intake.setPivotNeutral(), m_intake));
