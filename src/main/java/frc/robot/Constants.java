@@ -93,7 +93,7 @@ public final class Constants {
     public static final int kHopperMotorPort = 30;
     public static final boolean kHopperMotorCurrentLimitEnable = true;
     public static final int kHopperMotorCurrentLimit = 60;
-    public static double m_HopperSpeed = 0.50; //out
+    public static double m_HopperSpeed = 0.70; //out
   
   }
   public static class ShooterConstants {
