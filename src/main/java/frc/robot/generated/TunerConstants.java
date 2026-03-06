@@ -1,4 +1,4 @@
-package frc.robot.generated;
+/*package frc.robot.generated;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -479,7 +479,7 @@ public class TunerConstants {
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
-     */ 
+     */
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
             DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
@@ -487,9 +487,9 @@ public class TunerConstants {
     }
 
 
-    /*
+    /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected device types.
-     */  
+     */
     public static class TunerSwerveDrivetrain extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> {
         /**
          * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -500,7 +500,7 @@ public class TunerConstants {
          *
          * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
          * @param modules               Constants for each specific module
-         */ 
+         */
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             SwerveModuleConstants<?, ?, ?>... modules
@@ -569,3 +569,4 @@ public class TunerConstants {
         }
     }
 }
+
