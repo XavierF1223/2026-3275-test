@@ -137,18 +137,18 @@ public class RobotContainer {
     m_driverController.back().onTrue(m_intake.runOnce(()->m_intake.setPivotZero()));
 
     //-----------SysID Stuffs------------------------------------------------------------------------------
-    m_driverController.leftBumper().onTrue(Commands.runOnce(()->SignalLogger.setPath("/u/logs")).andThen(SignalLogger::start));
-    m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+    //m_driverController.leftBumper().onTrue(Commands.runOnce(()->SignalLogger.setPath("/u/logs")).andThen(SignalLogger::start));
+    //m_driverController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
     //----Drivetrain--------------------------------------------------------------------
-    /* */
+    /* 
     m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
     m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
     m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
     m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-    
+    */
     //--Intake Pivot---------------------------------------------------------------------------
     /* 
     m_driverController.povUp().whileTrue(m_intake.PivotsysIDQuasistatic(Direction.kForward));
