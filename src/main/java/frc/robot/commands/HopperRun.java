@@ -4,22 +4,26 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.*;
+import frc.robot.Constants.HopperConstants;
+import frc.robot.Constants.KickerConstants;
+import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.KickerSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeRun extends Command {
-  private IntakeSubsystem m_intake;
-  private double m_speed;
-  /** Creates a new IntakeRun. */
-  public IntakeRun(IntakeSubsystem intake, double speed) {
-    m_intake = intake;
-    m_speed = speed;
+public class HopperRun extends Command {
+  /** Creates a new HopperRun. */
+  private HopperSubsystem m_hopper;
+  private KickerSubsystem m_kicker;
+  public HopperRun(HopperSubsystem hopper, KickerSubsystem kicker) {
+    m_hopper = hopper;
+    m_kicker = kicker;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_intake);
+    addRequirements(m_hopper);
+    addRequirements(m_kicker);
   }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -27,13 +31,15 @@ public class IntakeRun extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.setRollerSpeed(m_speed);
+    m_hopper.setDutyCycleOut(HopperConstants.m_HopperSpeed);
+    m_kicker.setVelocity(KickerConstants.m_KickerVelocity);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setRollerNeutral();
+    m_hopper.setDutyCycleOut(0);
+    m_kicker.setVelocity(0);
   }
 
   // Returns true when the command should end.
