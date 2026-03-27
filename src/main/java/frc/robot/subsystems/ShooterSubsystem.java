@@ -48,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
     .withMotorOutput(
       new MotorOutputConfigs()
       .withNeutralMode(NeutralModeValue.Coast)
-      .withInverted(InvertedValue.valueOf("CounterClockwise_Positive"))
+      .withInverted(InvertedValue.valueOf("Clockwise_Positive"))
     )
     .withCurrentLimits(
       new CurrentLimitsConfigs()
@@ -81,14 +81,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void RPMMapFill(){ // Fill with shooter testing next week
-    distancetoRPM.put(0.75,0.0);
-    distancetoRPM.put(1.25, 0.0);
-    distancetoRPM.put(1.3,28.5);
-    distancetoRPM.put(1.5,29.0);
-    distancetoRPM.put(2.0,32.0);
-    distancetoRPM.put(2.5,33.5);
-    distancetoRPM.put(3.0,35.5);
-    distancetoRPM.put(4.0,38.0);
+    distancetoRPM.put(1.55,0.0);
+    distancetoRPM.put(1.6, 25.5);
+    distancetoRPM.put(2.0,26.5);
+    distancetoRPM.put(2.25,27.0);
+    distancetoRPM.put(2.5,28.0);
+    distancetoRPM.put(3.0,28.5);
+    distancetoRPM.put(3.25, 29.5);
+    distancetoRPM.put(3.55,30.0);
     }
 // -----methods-------------------------------------------------------------
   public void SetVelocity(double rps){

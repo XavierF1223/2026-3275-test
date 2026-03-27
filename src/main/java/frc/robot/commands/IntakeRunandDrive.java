@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.*;
 
@@ -19,8 +20,8 @@ public class IntakeRunandDrive extends Command {
   private DoubleSupplier m_X;
   private DoubleSupplier m_Y;
   private DoubleSupplier m_Omega;
-  private final SwerveRequest.RobotCentric drive = 
-  new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+  private final SwerveRequest.FieldCentric drive = 
+  new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   private IntakeSubsystem m_intake;
   private CommandSwerveDrivetrain m_drivetrain;
   private double speed = 0;
@@ -45,11 +46,11 @@ public class IntakeRunandDrive extends Command {
     m_drivetrain.setControl(
       drive.withVelocityX(-m_X.getAsDouble()*IntakeConstants.m_IntakeDriveSpeedMax)
            .withVelocityY(-m_Y.getAsDouble()*IntakeConstants.m_IntakeDriveSpeedMax)
-           .withRotationalRate(m_Omega.getAsDouble()));
+           .withRotationalRate(-m_Omega.getAsDouble()*DriveConstants.MaxAngularRate));
            
     double chassisspeed = m_drivetrain.ChassisSpeedsCalc();
     speed = m_intake.getRPM(chassisspeed);
-    m_intake.setRollerSpeed(speed);
+    m_intake.setRollerSpeed(-speed);
   }
 
   // Called once the command ends or is interrupted.

@@ -32,7 +32,7 @@ public class HopperRun extends Command {
   @Override
   public void execute() {
     m_hopper.setDutyCycleOut(HopperConstants.m_HopperSpeed);
-    m_kicker.setVelocity(KickerConstants.m_KickerVelocity);
+    m_kicker.setVelocity(-KickerConstants.m_KickerVelocity);
   }
 
   // Called once the command ends or is interrupted.
