@@ -43,7 +43,7 @@ public final class Constants {
     //Roller Motor Configs
     public static final int kRollerMotorPort = 31;
     public static final boolean kRollerMotorCurrentLimitEnable = true;
-    public static final int kRollerMotorCurrentLimit = 120;    
+    public static final int kRollerMotorCurrentLimit = 60;    
     public static final double kRollerKS = 0.22757;
     public static final double kRollerKV = 0.15;//0.11787;
     public static final double kRollerKA = 0.00438;
@@ -71,7 +71,7 @@ public final class Constants {
     //Pivot Motor Setpoints
     public static final double m_PivotUp = 0;
     public static final double m_PivotDown = 0.375;
-    public static final double m_IntakeDriveSpeedMax = 0;
+    public static final double m_IntakeDriveSpeedMax = 2.0;
 
     
 
@@ -79,7 +79,7 @@ public final class Constants {
   public static class KickerConstants {
     public static final int kKickerMotorPort = 35;
     public static final boolean kKickerMotorCurrentLimitEnable = true;
-    public static final int kKickerMotorCurrentLimit = 60;
+    public static final int kKickerMotorCurrentLimit = 80;
     public static final double m_KickerVelocity = -15;
     public static final double kS = 0.1194;
     public static final double kV = 0.5;//0.11295;
@@ -94,8 +94,8 @@ public final class Constants {
 
     public static final int kHopperMotorPort = 30;
     public static final boolean kHopperMotorCurrentLimitEnable = true;
-    public static final int kHopperMotorCurrentLimit = 60;
-    public static final double m_HopperSpeed = -0.75; //out
+    public static final int kHopperMotorCurrentLimit = 90;
+    public static final double m_HopperSpeed = -1.00; //out
   
   }
   public static class ShooterConstants {
@@ -103,7 +103,7 @@ public final class Constants {
     public static final int kMainMotorPort = 33;
     public static final int kFollowMotorPort = 34;
     public static final boolean kMotorCurrentLimitEnable = true;
-    public static final int kMotorCurrentLimit = 120;
+    public static final int kMotorCurrentLimit = 100;
     public static final double kS = 0.0015561;
     public static final double kV = 0.11164;
     public static final double kA = 0.021171;

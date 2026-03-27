@@ -14,6 +14,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.HopperRun;
 import frc.robot.commands.IntakeMove;
 import frc.robot.commands.IntakeRun;
+import frc.robot.commands.IntakeRunandDrive;
 import frc.robot.commands.ShooterRange;
 import frc.robot.commands.TargetHubandShootRange;
 import frc.robot.commands.TargetHubandShootRangeAuto;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
+import frc.robot.subsystems.PDH;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -58,6 +60,7 @@ public class RobotContainer {
   private final KickerSubsystem m_kicker = new KickerSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final VisionSubsystem m_vision = new VisionSubsystem();
+  private final PDH m_pdh = new PDH();
   //-----------Drivetrain Setup-------------------------------------
    /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -82,7 +85,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     drivetrain.configureAutoBuilder();
-    NamedCommands.registerCommand("shoot", new TargetHubandShootRangeAuto(drivetrain,m_shooter,m_hopper,m_kicker,m_vision).withTimeout(2));
+    NamedCommands.registerCommand("shoot", new TargetHubandShootRangeAuto(drivetrain,m_shooter,m_hopper,m_kicker,m_vision));
     NamedCommands.registerCommand("intakeup", new IntakeMove(0, m_intake));
     NamedCommands.registerCommand("intakedown", new IntakeMove(0.35, m_intake));
     NamedCommands.registerCommand("hopperrun", new HopperRun(m_hopper, m_kicker));
@@ -123,12 +126,12 @@ public class RobotContainer {
       new ParallelCommandGroup(
       (new RunCommand(() -> m_hopper.setDutyCycleOut(HopperConstants.m_HopperSpeed), m_hopper)),
       (new RunCommand(()-> m_kicker.setVelocity(-KickerConstants.m_KickerVelocity), m_kicker)),
-      (new IntakeMove(0.1, m_intake))))
+      (new RunCommand(()-> m_intake.setRollerSpeed(-80), m_intake))))
     .onFalse(
       new ParallelCommandGroup(
       (new RunCommand(() -> m_hopper.setNeutral(), m_hopper)),
       (new RunCommand(()-> m_kicker.setNeutral(), m_kicker)),
-      (new IntakeMove(0.38, m_intake)))
+      (new RunCommand(()-> m_intake.setRollerNeutral(), m_intake)))
       );
     m_driverController.b()
     .onTrue(
@@ -142,15 +145,18 @@ public class RobotContainer {
       );
 
     //m_driverController.x().toggleOnTrue(new ShooterRange(m_shooter, m_vision));
-    m_driverController.x().onTrue(new RunCommand(()->m_shooter.SetVelocity(42), m_shooter)).onFalse(new RunCommand(()->m_shooter.setNeutral(), m_shooter));
+    m_driverController.x().onTrue(new RunCommand(()->m_shooter.SetVelocity(30), m_shooter)).onFalse(new RunCommand(()->m_shooter.setNeutral(), m_shooter));
     m_driverController.y().toggleOnTrue(new TargetHubandShootRange(driverX, driverY,driverROT, drivetrain, m_shooter, m_vision));
 
-    //m_driverController.rightTrigger().onTrue(new IntakeRun(m_intake, drivetrain));
-    m_driverController.rightTrigger().onTrue(new RunCommand(()-> m_intake.setRollerSpeed(IntakeConstants.m_RollerVelocity),m_intake)).onFalse(new RunCommand(()-> m_intake.setRollerNeutral(),m_intake));
+    m_driverController.rightTrigger().toggleOnTrue(new IntakeRunandDrive(driverX, driverY,driverROT,m_intake,drivetrain));
+    //m_driverController.rightTrigger().onTrue(new RunCommand(()-> m_intake.setRollerSpeed(IntakeConstants.m_RollerVelocity),m_intake)).onFalse(new RunCommand(()-> m_intake.setRollerNeutral(),m_intake));
     m_driverController.leftStick().onTrue(new IntakeMove(IntakeConstants.m_PivotDown, m_intake));
     m_driverController.rightStick().onTrue(new IntakeMove(IntakeConstants.m_PivotUp, m_intake));
     m_driverController.leftBumper().onTrue(new RunCommand(()-> m_intake.setPivotOut(0.15), m_intake)).onFalse(new RunCommand(()->m_intake.setPivotNeutral(), m_intake));
     m_driverController.rightBumper().onTrue(new RunCommand(()-> m_intake.setPivotOut(-0.15), m_intake)).onFalse(new RunCommand(()->m_intake.setPivotNeutral(), m_intake));
+
+    m_driverController.povUp().onTrue(new RunCommand(()->m_pdh.toggleChannelOn(), m_pdh));
+    m_driverController.povDown().onTrue(new RunCommand(()->m_pdh.toggleChannelOff(), m_pdh));
 
 
     //Reset Heading

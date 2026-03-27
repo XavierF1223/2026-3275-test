@@ -18,6 +18,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,8 +42,8 @@ public class TargetHubandShootRange extends Command {
     private List<Integer> tags;
     private AprilTagFieldLayout layout =
     AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-    private final SwerveRequest.RobotCentric drive = 
-    new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private final SwerveRequest.FieldCentric drive = 
+    new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     private double distance_to_goal = 0.0;
     private double shooterspeed = 0;
     private boolean visibleTarget = false;
@@ -88,12 +89,12 @@ public class TargetHubandShootRange extends Command {
     SmartDashboard.putNumber("tagcount", m_vision.tagCount());
     SmartDashboard.putNumber("tagID", m_vision.getTagRawInt());
     SmartDashboard.putBoolean("right tag?", tags.contains(m_vision.getTagRawInt()));
-    double dist2 = m_vision.getDistanceToTarget().isPresent() ? m_vision.getDistanceToTarget().get() : 0.0;
-    SmartDashboard.putNumber("dist2", dist2);
+    //double dist2 = m_vision.getDistanceToTarget().isPresent() ? m_vision.getDistanceToTarget().get() : 0.0;
+    //SmartDashboard.putNumber("dist2", dist2);
     if (pose.isPresent() && m_vision.tagCount() >= 2){
-      distance_to_goal = PoseEstimate.getTranslation()
-      .getDistance(layout.getTagPose(m_vision.getTagRawInt()).get().toPose2d().getTranslation());
-      inrange = (distance_to_goal >= 1.25);
+      distance_to_goal = m_vision.getDistanceToTarget().isPresent() ? m_vision.getDistanceToTarget().get() : 0.0;
+      //distance_to_goal = PoseEstimate.getTranslation().getDistance(layout.getTagPose(m_vision.getTagRawInt()).get().toPose2d().getTranslation());
+      inrange = (distance_to_goal >= 1.5);
       SmartDashboard.putNumber("dist?", distance_to_goal);
       SmartDashboard.putBoolean("inrange?", inrange);
         

@@ -27,6 +27,7 @@ import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.TagLists;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -38,6 +39,7 @@ public class TargetHubandShootRangeAuto extends Command {
     private CommandSwerveDrivetrain m_drivetrain; 
     private VisionSubsystem m_vision;
     private HopperSubsystem m_hopper;
+    private KickerSubsystem m_kicker;
     private List<Integer> tags;
     private AprilTagFieldLayout layout =
     AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -50,15 +52,17 @@ public class TargetHubandShootRangeAuto extends Command {
     private double vision_desired_angle = 0.0;
     private double max_rot_speed = DriveConstants.MaxAngularRate;
 
-  public TargetHubandShootRangeAuto(CommandSwerveDrivetrain drive, ShooterSubsystem shooter,HopperSubsystem hopper, VisionSubsystem vision) {
+  public TargetHubandShootRangeAuto(CommandSwerveDrivetrain drive, ShooterSubsystem shooter, HopperSubsystem hopper,KickerSubsystem kicker, VisionSubsystem vision) {
     m_shooter = shooter;
     m_drivetrain = drive;
     m_hopper = hopper;
+    m_kicker = kicker;
     m_vision = vision;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter);
     addRequirements(m_drivetrain);
     addRequirements(m_hopper);
+    addRequirements(m_kicker);
     addRequirements(m_vision);
   }
   // Called when the command is initially scheduled.
