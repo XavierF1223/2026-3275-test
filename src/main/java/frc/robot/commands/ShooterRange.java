@@ -65,7 +65,7 @@ public class ShooterRange extends Command {
     //SmartDashboard.putBoolean("pose?", PoseEstimate.isPresent());
     if (/*PoseEstimate.isPresent() &&*/ m_vision.tagCount() >= 1){
       //Pose2d robotPose = PoseEstimate.get();
-      double distance_to_goal = PoseEstimate.getTranslation()
+      distance_to_goal = PoseEstimate.getTranslation()
       .getDistance(layout.getTagPose(m_vision.getTagRawInt()).get().toPose2d().getTranslation());
       SmartDashboard.putNumber("dist?", distance_to_goal);
 
@@ -75,7 +75,7 @@ public class ShooterRange extends Command {
       shooterspeed = m_shooter.getRPM(distance_to_goal);
       SmartDashboard.putNumber("FetchedRPM", shooterspeed);
     
-    if (visibleTarget && shooterspeed > 25.0){
+    if (visibleTarget){
       m_shooter.SetVelocity(shooterspeed);
        }
       }
