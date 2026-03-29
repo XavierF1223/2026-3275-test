@@ -1,5 +1,4 @@
-//3275
-package frc.robot.generated;
+/*package frc.robot.generated;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -61,6 +60,7 @@ public class TunerConstants {
             new OpenLoopRampsConfigs()
             .withVoltageOpenLoopRampPeriod(0.1)
         );
+
     private static final TalonFXConfiguration steerInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
@@ -199,7 +199,7 @@ public class TunerConstants {
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
-     */ 
+     *//* 
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
             DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
@@ -207,9 +207,9 @@ public class TunerConstants {
     }
 
 
-    /*
+    /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected device types.
-     */  
+     */ /* 
     public static class TunerSwerveDrivetrain extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> {
         /**
          * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -220,7 +220,7 @@ public class TunerConstants {
          *
          * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
          * @param modules               Constants for each specific module
-         */ 
+         *//* 
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             SwerveModuleConstants<?, ?, ?>... modules
@@ -243,7 +243,7 @@ public class TunerConstants {
          *                                unspecified or set to 0 Hz, this is 250 Hz on
          *                                CAN FD, and 100 Hz on CAN 2.0.
          * @param modules                 Constants for each specific module
-         */
+         *//*
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             double odometryUpdateFrequency,
@@ -273,7 +273,7 @@ public class TunerConstants {
          *                                  in the form [x, y, theta]ᵀ, with units in meters
          *                                  and radians
          * @param modules                   Constants for each specific module
-         */
+         *//* 
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             double odometryUpdateFrequency,
@@ -288,10 +288,7 @@ public class TunerConstants {
             );
         }
     }
-}
-/* 
-//3134
-package frc.robot.generated;
+}*/package frc.robot.generated;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -317,8 +314,8 @@ public class TunerConstants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-        .withKP(100).withKI(0).withKD(0.5)
-        .withKS(0.1).withKV(1.59).withKA(0)
+        .withKP(26.293).withKI(0).withKD(0.1)
+        .withKS(0.059535).withKV(1.4703).withKA(0.0293)
         .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
@@ -339,7 +336,7 @@ public class TunerConstants {
     private static final SteerMotorArrangement kSteerMotorType = SteerMotorArrangement.TalonFX_Integrated;
 
     // The remote sensor feedback type to use for the steer motors;
-    // When not Pro-licensed, Fused Sync* automatically fall back to Remote*
+    // When not Pro-licensed, Fused*/Sync* automatically fall back to Remote*
     private static final SteerFeedbackType kSteerFeedbackType = SteerFeedbackType.FusedCANcoder;
 
     // The stator current at which the wheels start to slip;
@@ -487,18 +484,18 @@ public class TunerConstants {
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
-     *//* 
+     */
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
             DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
         );
-    }*/
+    }
 
 
     /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected device types.
      */
-    //public static class TunerSwerveDrivetrain extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> {
+    public static class TunerSwerveDrivetrain extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> {
         /**
          * Constructs a CTRE SwerveDrivetrain using the specified constants.
          * <p>
@@ -508,7 +505,7 @@ public class TunerConstants {
          *
          * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
          * @param modules               Constants for each specific module
-         */ /* 
+         */
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             SwerveModuleConstants<?, ?, ?>... modules
@@ -517,7 +514,7 @@ public class TunerConstants {
                 TalonFX::new, TalonFX::new, CANcoder::new,
                 drivetrainConstants, modules
             );
-        }*/
+        }
 
         /**
          * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -531,7 +528,7 @@ public class TunerConstants {
          *                                unspecified or set to 0 Hz, this is 250 Hz on
          *                                CAN FD, and 100 Hz on CAN 2.0.
          * @param modules                 Constants for each specific module
-         */ /* 
+         */
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             double odometryUpdateFrequency,
@@ -541,7 +538,7 @@ public class TunerConstants {
                 TalonFX::new, TalonFX::new, CANcoder::new,
                 drivetrainConstants, odometryUpdateFrequency, modules
             );
-        }*/
+        }
 
         /**
          * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -561,7 +558,7 @@ public class TunerConstants {
          *                                  in the form [x, y, theta]áµ€, with units in meters
          *                                  and radians
          * @param modules                   Constants for each specific module
-         *//* 
+         */
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             double odometryUpdateFrequency,
@@ -577,4 +574,4 @@ public class TunerConstants {
         }
     }
 }
-*/
+
